@@ -3,6 +3,21 @@ import matplotlib.pyplot as plt
 
 from pathlib import Path
 
+def initialize_data():
+    try:
+        import kaggle
+    except ImportError("kagglehub is necessary to download the dataset") as e:
+        raise e
+    
+    raw_path = Path("data/raw")
+
+    if not raw_path.exists():
+        raw_path.mkdir(parents=True, exist_ok=True)
+
+    kaggle.api.authenticate()
+    kaggle.api.dataset_download_files("prashantsingh001/recipes-dataset-64k-dishes", path=raw_path, unzip=True)
+
+
 def load_data(path: Path):
     df = pl.read_csv(path)
     return df
